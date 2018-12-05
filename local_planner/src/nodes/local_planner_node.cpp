@@ -86,7 +86,8 @@ LocalPlannerNode::LocalPlannerNode() {
   mavros_obstacle_distance_pub_ =
       nh_.advertise<sensor_msgs::LaserScan>("/mavros/obstacle/send", 10);
   mavros_system_status_pub_ =
-      nh_.advertise<mavros_msgs::CompanionProcessStatus>("/mavros/companion_process/status", 1);
+      nh_.advertise<mavros_msgs::CompanionProcessStatus>(
+          "/mavros/companion_process/status", 1);
   current_waypoint_pub_ =
       nh_.advertise<visualization_msgs::Marker>("/current_setpoint", 1);
   takeoff_pose_pub_ =
