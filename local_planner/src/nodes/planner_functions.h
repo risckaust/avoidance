@@ -97,7 +97,7 @@ bool calculateCostMap(std::vector<float> cost_path_candidates,
 bool getDirectionFromTree(
     Eigen::Vector3f &p,
     const std::vector<geometry_msgs::Point> &path_node_positions,
-    const Eigen::Vector3f& position);
+    const Eigen::Vector3f &position);
 geometry_msgs::Point getSphereAdaptedWaypoint(
     geometry_msgs::Point position, geometry_msgs::Point wp,
     geometry_msgs::Point avoid_centerpoint, double avoid_radius);

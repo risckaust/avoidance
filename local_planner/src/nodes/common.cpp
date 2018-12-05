@@ -61,29 +61,29 @@ double azimuthIndexToAngle(int z, double res) {
   return z * res + res / 2 - 180;
 }
 
-int azimuthAnglefromCartesian(const geometry_msgs::Point& position,
-                              const geometry_msgs::Point& origin) {
-  return azimuthAnglefromCartesian(position.x, position.y, origin);
+int azimuthAnglefromCartesian(const Eigen::Vector3f& position,
+                              const Eigen::Vector3f& origin) {
+  return azimuthAnglefromCartesian(position.x(), position.y(), origin);
 }
 
-int azimuthAnglefromCartesian(double x, double y,
-                              const geometry_msgs::Point& pos) {
-  return floor(atan2(x - pos.x, y - pos.y) * 180.0 / M_PI);  //(-180. +180]
+int azimuthAnglefromCartesian(double x, double y, const Eigen::Vector3f& pos) {
+  return floor(atan2(x - pos.x(), y - pos.y()) * 180.0 / M_PI);  //(-180. +180]
 }
 
 int elevationAnglefromCartesian(double x, double y, double z,
-                                const geometry_msgs::Point& pos) {
-  double den = sqrt((x - pos.x) * (x - pos.x) + (y - pos.y) * (y - pos.y));
+                                const Eigen::Vector3f& pos) {
+  double den =
+      sqrt((x - pos.x()) * (x - pos.x()) + (y - pos.y()) * (y - pos.y()));
   if (den == 0) {
     return 0;
   } else {
-    return floor(atan((z - pos.z) / den) * 180.0 / M_PI);  //(-90.+90)
+    return floor(atan((z - pos.z()) / den) * 180.0 / M_PI);  //(-90.+90)
   }
 }
 
-int elevationAnglefromCartesian(const geometry_msgs::Point& pos,
-                                const geometry_msgs::Point& origin) {
-  return elevationAnglefromCartesian(pos.x, pos.y, pos.z, origin);
+int elevationAnglefromCartesian(const Eigen::Vector3f& pos,
+                                const Eigen::Vector3f& origin) {
+  return elevationAnglefromCartesian(pos.x(), pos.y(), pos.z(), origin);
 }
 
 int elevationAngletoIndex(int e, int res) {  //[-90,90]
