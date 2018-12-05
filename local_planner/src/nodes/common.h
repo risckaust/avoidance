@@ -11,11 +11,7 @@
 namespace avoidance {
 
 float distance2DPolar(int e1, int z1, int e2, int z2);
-float computeL2Dist(const geometry_msgs::Point& position,
-                    const pcl::PointXYZ& xyz);
-float distance3DCartesian(const geometry_msgs::Point& a,
-                          const geometry_msgs::Point& b);
-geometry_msgs::Point fromPolarToCartesian(int e, int z, double radius,
+Eigen::Vector3f fromPolarToCartesian(int e, int z, double radius,
                                           const geometry_msgs::Point& pos);
 double indexAngleDifference(int a, int b);
 geometry_msgs::Vector3Stamped getWaypointFromAngle(

@@ -55,7 +55,7 @@ void filterPointCloud(
     int &counter_sphere,
     const std::vector<pcl::PointCloud<pcl::PointXYZ>> &complete_cloud,
     double min_cloud_size, double min_dist_backoff, double sphere_radius,
-    Box histogram_box, const geometry_msgs::Point &position,
+    Box histogram_box, const Eigen::Vector3f &position,
     double min_realsense_dist);
 void calculateFOV(double h_FOV, double v_FOV, std::vector<int> &z_FOV_idx,
                   int &e_FOV_min, int &e_FOV_max, double yaw, double pitch);
@@ -94,9 +94,10 @@ void printHistogram(Histogram hist, std::vector<int> z_FOV_idx, int e_FOV_min,
                     double resolution);
 bool calculateCostMap(std::vector<float> cost_path_candidates,
                       std::vector<int> &cost_idx_sorted);
-bool getDirectionFromTree(geometry_msgs::Point &p,
-                          std::vector<geometry_msgs::Point> path_node_positions,
-                          geometry_msgs::Point position);
+bool getDirectionFromTree(
+    Eigen::Vector3f &p,
+    const std::vector<geometry_msgs::Point> &path_node_positions,
+    const Eigen::Vector3f& position);
 geometry_msgs::Point getSphereAdaptedWaypoint(
     geometry_msgs::Point position, geometry_msgs::Point wp,
     geometry_msgs::Point avoid_centerpoint, double avoid_radius);

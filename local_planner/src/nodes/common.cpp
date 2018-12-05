@@ -13,26 +13,14 @@ float distance2DPolar(int e1, int z1, int e2, int z2) {
   return sqrt(pow((e1 - e2), 2) + pow((z1 - z2), 2));
 }
 
-float computeL2Dist(const geometry_msgs::Point& position,
-                    const pcl::PointXYZ& xyz) {
-  return sqrt(pow(position.x - xyz.x, 2) + pow(position.y - xyz.y, 2) +
-              pow(position.z - xyz.z, 2));
-}
-
-float distance3DCartesian(const geometry_msgs::Point& a,
-                          const geometry_msgs::Point& b) {
-  return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) +
-              (a.z - b.z) * (a.z - b.z));
-}
-
 // transform polar coordinates into Cartesian coordinates
-geometry_msgs::Point fromPolarToCartesian(int e, int z, double radius,
-                                          const geometry_msgs::Point& pos) {
-  geometry_msgs::Point p;
-  p.x =
+Eigen::Vector3f fromPolarToCartesian(int e, int z, double radius,
+                                     const geometry_msgs::Point& pos) {
+  Eigen::Vector3f p;
+  p.x() =
       pos.x + radius * cos(e * (M_PI / 180)) * sin(z * (M_PI / 180));  // round
-  p.y = pos.y + radius * cos(e * (M_PI / 180)) * cos(z * (M_PI / 180));
-  p.z = pos.z + radius * sin(e * (M_PI / 180));
+  p.y() = pos.y + radius * cos(e * (M_PI / 180)) * cos(z * (M_PI / 180));
+  p.z() = pos.z + radius * sin(e * (M_PI / 180));
 
   return p;
 }
@@ -45,14 +33,12 @@ double indexAngleDifference(int a, int b) {
 // transform a 2D polar histogram direction in a 3D Catesian coordinate point
 geometry_msgs::Vector3Stamped getWaypointFromAngle(
     int e, int z, const geometry_msgs::Point& pos) {
-  geometry_msgs::Point p = fromPolarToCartesian(e, z, 1.0, pos);
+  Eigen::Vector3f p = fromPolarToCartesian(e, z, 1.0, pos);
 
   geometry_msgs::Vector3Stamped waypoint;
   waypoint.header.stamp = ros::Time::now();
   waypoint.header.frame_id = "/local_origin";
-  waypoint.vector.x = p.x;
-  waypoint.vector.y = p.y;
-  waypoint.vector.z = p.z;
+  waypoint.vector = toVector3(p);
 
   return waypoint;
 }
@@ -61,10 +47,10 @@ geometry_msgs::Vector3Stamped getWaypointFromAngle(
 bool hasSameYawAndAltitude(const geometry_msgs::PoseStamped& old_wp,
                            const geometry_msgs::Vector3Stamped& new_wp,
                            double new_yaw, double old_yaw) {
-  return abs(new_yaw) >= abs(0.9 * old_yaw) &&
-         abs(new_yaw) <= abs(1.1 * old_yaw) &&
-         abs(new_wp.vector.z) >= abs(0.9 * old_wp.pose.position.z) &&
-         abs(new_wp.vector.z) <= abs(1.1 * old_wp.pose.position.z);
+  return std::abs(new_yaw) >= std::abs(0.9 * old_yaw) &&
+         std::abs(new_yaw) <= std::abs(1.1 * old_yaw) &&
+         std::abs(new_wp.vector.z) >= std::abs(0.9 * old_wp.pose.position.z) &&
+         std::abs(new_wp.vector.z) <= std::abs(1.1 * old_wp.pose.position.z);
 }
 
 double elevationIndexToAngle(int e, double res) {
